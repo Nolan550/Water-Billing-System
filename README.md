@@ -18,6 +18,8 @@ See the `/UML/WaterBillingSystemDiagram.png` file.
 3. Compile and run the main program
 
 ## Group Members
-- Nolan Davis – 123456
-- Jane Doe – 123457
-- John Smith – 123458
+- Nolan Davis 
+- Benedict Martin
+- Erick Thomas
+- Abdulhafidh Seif
+- Rifat Othman
