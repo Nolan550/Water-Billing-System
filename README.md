@@ -10,7 +10,7 @@ This project automates water billing, meter readings, and payment tracking for c
 - Stores payment history
 
 ## UML Class Diagram
-See the `/UML/WaterBillingSystemDiagram.png` file.
+See the [class diagram](UML/Class-Diagram) structure.
 
 ## How to Run
 1. Clone the repository
