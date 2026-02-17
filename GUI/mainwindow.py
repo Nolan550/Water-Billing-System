@@ -1,3 +1,9 @@
+from datetime import date
+from models.customer import Customer
+from models.customerType import Customer_Type
+from models.meter import Meter
+from models.bill import Bill
+from models.payment import Payment
 import tkinter as tk
 from tkinter import messagebox
 
@@ -11,7 +17,10 @@ class main_window:
         self.title_label = tk.Label(self.root, text="Water billing System", font=("Arial", 16))
         self.title_label.pack(pady=10)
 
-        self.name_entry = tk.Entry(self.root, text="Customer Name:")
+        self.name_entry = tk.Entry(self.root, text="Customer First Name:")
+        self.name_entry.pack()
+
+        self.name_entry = tk.Entry(self.root, text="Customer Last Name:")
         self.name_entry.pack()
 
         self.meter_label = tk.Label(self.root, text="Current Meter Reading:")
@@ -32,14 +41,40 @@ class main_window:
         meter_reading = self.meter_entry.get()
 
         if name == "" or meter_reading == "":
-            messagebox.showerror("Error", "All field are required!")
+            messagebox.showerror("Error", "All fields are required!")
             return
-        self.output_label.config(text=f"Bill generated for {name}")
+        
+        try:
+            meter_reading = float(meter_reading)
+        except ValueError:
+            messagebox.showerror("Error", "Meter reading must be a number!")
+            return
+        
+        customer_Type = Customer_Type(1, "Residential", 2.5)
+
+        previous_reading = 100
+    
+        meter = Meter(1, previous_reading, previous_reading, date.today())
+
+        meter.record_reading(meter_reading, date.today())
+
+        customer = Customer(1, name, "Nolan","Dar es Salaam", "0744097836", customer_Type, meter)
+
+        bill = Bill(1, "March", 2026, customer)
+
+        amount = bill.calculate_bill_amount()
+        self.output_label.config(
+            text=f"Consumption: {bill.water_consumption}\nAmount Due: {amount}"
+        )
+
+
+        ###
+       # self.output_label.config(text=f"Bill generated for {name}")
     
 
     def run(self):
         self.root.mainloop()
-        
+
         self.create_widgets()
 
     def create_widgets(self):
