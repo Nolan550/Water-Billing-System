@@ -1,9 +1,9 @@
-class CustomerType:
+class Customer_Type:
     
-    def __init__(self, typeID, typeName, ratePerUnit):
-        self.typeID = typeID
-        self.typeName = typeName
-        self.ratePerUnit = ratePerUnit
+    def __init__(self, type_ID, type_name, rate_per_unit):
+        self.type_ID = type_ID
+        self.type_name = type_name
+        self.rate_per_unit = rate_per_unit
 
-    def getRatePerUnit(self):
-        return self.ratePerUnit
+    def get_rate_per_unit(self):
+        return self.rate_per_unit

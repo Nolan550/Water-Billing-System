@@ -2,17 +2,17 @@ from datetime import date
 
 class Meter:
 
-    def __init__(self, meterID: int, previousReading: float, currentReading: float, readingDate: date):
-        self.meterID = meterID
-        self.previousReading = previousReading
-        self.currentReading = currentReading
-        self.readingDate = readingDate
+    def __init__(self, meter_ID: int, previous_reading: float, current_reading: float, reading_date: date):
+        self.meter_ID = meter_ID
+        self.previous_reading = previous_reading
+        self.current_reading = current_reading
+        self.reading_date = reading_date
 
-    def recordReading(self, newReading: float, readingDate):
-        self.previousReading = self.currentReading
-        self.currentReading = newReading
-        self.readingDate = date.today()
+    def record_reading(self, new_reading: float, reading_date: date):
+        self.previous_reading = self.current_reading
+        self.current_reading = new_reading
+        self.reading_date = reading_date
 
-    def calculateConsumption(self):
-        return self.currentReading - self.previousReading
+    def calculate_consumption(self):
+        return self.current_reading - self.previous_reading
     

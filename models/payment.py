@@ -3,19 +3,24 @@ from models.bill import Bill
 
 class Payment:
     
-    def __init__(self, paymentID: int, amountPaid: float, paymentMethods: str, bill: Bill):
-        self.paymentID = paymentID
-        self.paymentDate = date.today()
-        self.amountPaid = amountPaid
-        self.paymentMethods = paymentMethods
+    def __init__(self, payment_ID: int, amount_paid: float, payment_methods: str, bill: Bill):
+        self.payment_ID = payment_ID
+        self.payment_date = date.today()
+        self.amount_paid = amount_paid
+        self.payment_methods = payment_methods
         self.bill = bill
 
-    def processPayment(self):
-        if self.amountPaid >= self.bill.amountDue:
-            self.bill.updateBillStatus("Paid")
+    def process_payment(self):
+        if self.amount_paid >= self.bill.amount_due:
+            self.bill.update_bill_status("Paid")
         else:
-            self.bill.updateBillStatus("Partial")
+            self.bill.update_bill_status("Partial")
+            
 
-    def getPaymentDetails(self):
-            return f"Payment ID: {self.paymentID}, Amount Paid: {self.amountPaid}"
+    def get_payment_details(self):
+        if self.amount_paid < self.bill.amount_due:
+            print(f"Remaining Debt: { self.bill.amount_due - self.amount_paid}")
+        return f"Payment ID: {self.payment_ID}\nAmount Paid: {self.amount_paid}"
+    
+
         
