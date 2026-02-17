@@ -1,9 +1,10 @@
 from typing import List
-from meter import meter
-from customerType import customerType
-class customer:
+from models.meter import Meter
+from models.customerType import CustomerType
 
-    def __init__ (self, customerID, cusFname, cusLname, address, phoneNumber, customerType: customerType, meter: meter):
+class Customer:
+
+    def __init__ (self, customerID, cusFname, cusLname, address, phoneNumber, customerType: CustomerType, meter: Meter):
         self.customerID = customerID
         self.cusFname = cusFname
         self.cusLname = cusLname

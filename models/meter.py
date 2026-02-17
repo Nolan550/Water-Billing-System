@@ -1,5 +1,6 @@
 from datetime import date
-class meter:
+
+class Meter:
 
     def __init__(self, meterID: int, previousReading: float, currentReading: float, readingDate: date):
         self.meterID = meterID

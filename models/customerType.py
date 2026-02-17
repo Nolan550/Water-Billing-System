@@ -1,4 +1,4 @@
-class customerType:
+class CustomerType:
     
     def __init__(self, typeID, typeName, ratePerUnit):
         self.typeID = typeID
