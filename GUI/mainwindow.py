@@ -5,6 +5,7 @@ from models.meter import Meter
 from models.bill import Bill
 from models.payment import Payment
 import tkinter as tk
+from tkinter import ttk
 from tkinter import messagebox
 
 class main_window:
@@ -16,6 +17,16 @@ class main_window:
 
         self.title_label = tk.Label(self.root, text="Water billing System", font=("Arial", 16))
         self.title_label.pack(pady=10)
+
+        self.customer_type_label = tk.Label(self.root, text="Customer Type:")
+        self.customer_type_label.pack()
+
+        self.customer_type_var = tk.StringVar()
+        self.type_dropdown = ttk.Combobox(self.root, textvariable=self.customer_type_var, state="readonly")
+
+        self.type_dropdown["values"] = ("Residential", "Commercial", "Industrial")
+        self.type_dropdown.current(0)
+        self.type_dropdown.pack()
 
         self.name_entry = tk.Entry(self.root, text="Customer First Name:")
         self.name_entry.pack()
@@ -32,8 +43,8 @@ class main_window:
         self.generate_bill_button = tk.Button(self.root, text="Generate Bill", command=self.generate_bill)
         self.generate_bill_button.pack(pady=10)
 
-        self.output_label = tk.Label(self.root, text="")
-        self.output_label.pack()
+        self.output_label = tk.Label(self.root, height=15, width=60)
+        self.output_label.pack(pady=10)
 
 
     def generate_bill(self):
@@ -50,7 +61,16 @@ class main_window:
             messagebox.showerror("Error", "Meter reading must be a number!")
             return
         
-        customer_Type = Customer_Type(1, "Residential", 2.5)
+        selected_type = self.customer_type_var.get()
+
+        if selected_type == "Residential":
+            rate = 2.5
+        elif selected_type == "Commercial":
+            rate = 4.0
+        else:
+            rate = 6.0
+
+        customer_Type = Customer_Type(1, selected_type, rate)
 
         previous_reading = 100
     
@@ -63,14 +83,26 @@ class main_window:
         bill = Bill(1, "March", 2026, customer)
 
         amount = bill.calculate_bill_amount()
-        self.output_label.config(
-            text=f"Consumption: {bill.water_consumption}\nAmount Due: {amount}"
-        )
+        amount_due = amount
 
+        details =f"""
+        ---------------WATER BILL DETAILS----------------
+        Customer Name: {customer.cus_Fname} {customer.cus_Lname}
+        Customr Type: {selected_type}
 
-        ###
-       # self.output_label.config(text=f"Bill generated for {name}")
-    
+        Previous Meter Reading: {previous_reading}
+        Current Meter Reading: {meter.current_reading}
+        Water Consumption: {meter.calculate_consumption()} units
+
+        Rate Per Unit: {rate} TZS
+        Amount Due: {bill.amount_due} TZS
+
+        Status: {bill.bill_status}
+        Billing Period: {bill.billing_month} {bill.billing_year}
+        ------------------------------------------------
+        """
+        print(details)
+        
 
     def run(self):
         self.root.mainloop()
