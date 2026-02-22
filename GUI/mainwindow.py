@@ -4,7 +4,7 @@ from models.customerType import Customer_Type
 from models.meter import Meter
 from models.bill import Bill
 from models.payment import Payment
-
+from services.customer_service import add_customer
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -24,7 +24,7 @@ class main_window:
         self.main_frame = tk.Frame(self.root, bg="white", bd=2, relief="groove")
         self.main_frame.pack(pady=20, padx=40)
 
-        self.form_frame = tk.Frame(self.root, bg="white")
+        self.form_frame = tk.Frame(self.main_frame, bg="white")
         self.form_frame.pack(pady=20)
 
         tk.Label(self.form_frame, text="Customer Type:", bg="white", font=("Arial", 11)).grid(row=0, column=0, sticky="w", pady=5)
@@ -113,32 +113,37 @@ class main_window:
 
         selected_type = self.customer_type_var.get()
 
-        if selected_type == "Residential":
-            rate = 2.5
-        elif selected_type == "Commercial":
-            rate = 4.0
-        else:
-            rate = 6.0
 
-        customer_Type = Customer_Type(1, selected_type, rate)
+        customer_type = get_customer_type_by_name(selected_type)
+        type_id = customer_type["type_id"]
+        rate = customer = customer_type["rate_per_unit"]
 
-        previous_reading = 100
 
-        meter = Meter(1, previous_reading, previous_reading, date.today())
-        meter.record_reading(meter_reading, date.today())
-
-        customer = Customer(
-            1,
+        customer_id = add_customer(
             name,
             lname,
             "Dar es Salaam",
             "0744097836",
-            customer_Type,
-            meter
+            type_id
+        )
+        
+
+        previous_reading = 100
+        consumption = meter_reading - previous_reading
+
+        add_meter_reading(customer_id, previous_reading, meter_reading)
+
+        amount_due = consumption * rate
+
+        create_bill(
+            customer_id,
+            "March",
+            2026,
+            consumption
+            amount_due
         )
 
-        bill = Bill(1, "March", 2026, customer)
-        amount = bill.calculate_bill_amount()
+        
 
         details = f"""
 --------------- WATER BILL DETAILS ----------------
@@ -162,8 +167,6 @@ Billing Period: {bill.billing_month} {bill.billing_year}
         
         self.output_label.config(text=details)
 
-        
-        print(details)
 
     
 
