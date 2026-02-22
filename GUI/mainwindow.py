@@ -4,63 +4,113 @@ from models.customerType import Customer_Type
 from models.meter import Meter
 from models.bill import Bill
 from models.payment import Payment
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+
 
 class main_window:
 
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Water Billing Management System")
-        self.root.geometry("500x400")
+        self.root.geometry("900x700")
+        self.root.configure(bg="#EAF6FF")
 
-        self.title_label = tk.Label(self.root, text="Water billing System", font=("Arial", 16))
-        self.title_label.pack(pady=10)
+        self.header = tk.Label(self.root, text=" 💧 WATER BILLING MANAGEMENT SYSTEM", font=("Helvetica", 18, "bold"), bg="#0A3D62", fg="white", pady=15)
+        self.header.pack(fill="x")
 
-        self.customer_type_label = tk.Label(self.root, text="Customer Type:")
-        self.customer_type_label.pack()
+        self.main_frame = tk.Frame(self.root, bg="white", bd=2, relief="groove")
+        self.main_frame.pack(pady=20, padx=40)
+
+        self.form_frame = tk.Frame(self.root, bg="white")
+        self.form_frame.pack(pady=20)
+
+        tk.Label(self.form_frame, text="Customer Type:", bg="white", font=("Arial", 11)).grid(row=0, column=0, sticky="w", pady=5)
+
 
         self.customer_type_var = tk.StringVar()
-        self.type_dropdown = ttk.Combobox(self.root, textvariable=self.customer_type_var, state="readonly")
-
+        self.type_dropdown = ttk.Combobox(
+            self.form_frame,
+            textvariable=self.customer_type_var,
+            state="readonly",
+            width=25
+        )
         self.type_dropdown["values"] = ("Residential", "Commercial", "Industrial")
         self.type_dropdown.current(0)
-        self.type_dropdown.pack()
+        self.type_dropdown.grid(row=0, column=1, pady=10)
 
-        self.name_entry = tk.Entry(self.root, text="Customer First Name:")
-        self.name_entry.pack()
+        
+        tk.Label(self.form_frame, text="Customer First Name:", bg="white", font=("Arial", 11)).grid(row=1, column=0, sticky="w", pady=5)
+        
 
-        self.name_entry = tk.Entry(self.root, text="Customer Last Name:")
-        self.name_entry.pack()
+        self.name_entry = tk.Entry(self.form_frame, width=28)
+        self.name_entry.grid(row=1, column=1, pady=5)
 
-        self.meter_label = tk.Label(self.root, text="Current Meter Reading:")
-        self.meter_label.pack()
+        
+        tk.Label(self.form_frame, text="Customer Last Name:", bg="white", font=("Arial", 11)).grid(row=2, column=0, sticky="w", pady=5)
+        
 
-        self.meter_entry = tk.Entry(self.root)
-        self.meter_entry.pack()
+        self.lname_entry = tk.Entry(self.form_frame, width=28)
+        self.lname_entry.grid(row=2, column=1, pady=5)
 
-        self.generate_bill_button = tk.Button(self.root, text="Generate Bill", command=self.generate_bill)
-        self.generate_bill_button.pack(pady=10)
+        
+        tk.Label(self.form_frame, text="Current Meter Reading:", bg="white", font=("Arial", 11)).grid(row=3, column=0, sticky="w", pady=5)
+        
 
-        self.output_label = tk.Label(self.root, height=15, width=60)
+        self.meter_entry = tk.Entry(self.form_frame, width=28)
+        self.meter_entry.grid(row=3, column=1, pady=5)
+
+        
+        self.generate_bill_button = tk.Button(
+            self.main_frame,
+            text="Generate Bill",
+            bg="#1E90FF",
+            fg="white",
+            font=("Arial", 11, "bold"),
+            width=20,
+            activebackground="#0A3D62",
+            relief="flat",
+            command=self.generate_bill
+        )
+        self.generate_bill_button.pack(pady=15)
+
+        
+        self.output_label = tk.Label(
+            self.root,
+            bg="#F4FAFF",
+            fg="#0A3D62",
+            font=("Courier", 10),
+            height=15,
+            bd=1,
+            relief="solid",
+            padx=10,
+            pady=10,
+            width=80,
+            justify="left",
+            anchor="nw"
+        )
         self.output_label.pack(pady=10)
 
+    
 
     def generate_bill(self):
+
         name = self.name_entry.get()
+        lname = self.lname_entry.get()
         meter_reading = self.meter_entry.get()
 
-        if name == "" or meter_reading == "":
+        if name == "" or lname == "" or meter_reading == "":
             messagebox.showerror("Error", "All fields are required!")
             return
-        
+
         try:
             meter_reading = float(meter_reading)
         except ValueError:
             messagebox.showerror("Error", "Meter reading must be a number!")
             return
-        
+
         selected_type = self.customer_type_var.get()
 
         if selected_type == "Residential":
@@ -73,77 +123,49 @@ class main_window:
         customer_Type = Customer_Type(1, selected_type, rate)
 
         previous_reading = 100
-    
-        meter = Meter(1, previous_reading, previous_reading, date.today())
 
+        meter = Meter(1, previous_reading, previous_reading, date.today())
         meter.record_reading(meter_reading, date.today())
 
-        customer = Customer(1, name, "Nolan","Dar es Salaam", "0744097836", customer_Type, meter)
+        customer = Customer(
+            1,
+            name,
+            lname,
+            "Dar es Salaam",
+            "0744097836",
+            customer_Type,
+            meter
+        )
 
         bill = Bill(1, "March", 2026, customer)
-
         amount = bill.calculate_bill_amount()
-        amount_due = amount
 
-        details =f"""
-        ---------------WATER BILL DETAILS----------------
-        Customer Name: {customer.cus_Fname} {customer.cus_Lname}
-        Customr Type: {selected_type}
+        details = f"""
+--------------- WATER BILL DETAILS ----------------
 
-        Previous Meter Reading: {previous_reading}
-        Current Meter Reading: {meter.current_reading}
-        Water Consumption: {meter.calculate_consumption()} units
+Customer Name: {customer.cus_Fname} {customer.cus_Lname}
+Customer Type: {selected_type}
 
-        Rate Per Unit: {rate} TZS
-        Amount Due: {bill.amount_due} TZS
+Previous Meter Reading: {previous_reading}
+Current Meter Reading: {meter.current_reading}
+Water Consumption: {meter.calculate_consumption()} units
 
-        Status: {bill.bill_status}
-        Billing Period: {bill.billing_month} {bill.billing_year}
-        ------------------------------------------------
-        """
-        print(details)
+Rate Per Unit: {rate} TZS
+Amount Due: {bill.amount_due} TZS
+
+Status: {bill.bill_status}
+Billing Period: {bill.billing_month} {bill.billing_year}
+
+---------------------------------------------------
+"""
+
         
+        self.output_label.config(text=details)
 
-    def run(self):
-        self.root.mainloop()
+        
+        print(details)
 
-        self.create_widgets()
-
-    def create_widgets(self):
-        title_label = tk.Label(
-            self.root,
-            text="Water Billing Managment System",
-            font=("Arial", 16, "bold")
-        )
-        title_label.pack(pady=20)
-
-        add_customer_button = tk.Button(
-            self.root,
-            text = "Add Customer",
-            width = 20
-        )
-        add_customer_button.pack(pady=10)
-
-        generate_bill_button = tk.Button(
-            self.root,
-            text="Generate Bill",
-            width = 20
-        )
-        generate_bill_button.pack(pady = 10)
-
-        payment_button = tk.Button(
-            self.root,
-            text="Process Payment",
-            width = 20
-        )
-        payment_button.pack(pady=10)
-
-        view_bills_button =  tk.Button(
-            self.root,
-            text="View Bills",
-            width = 20
-        )
-        view_bills_button.pack(pady=10)
+    
 
     def run(self):
         self.root.mainloop()
