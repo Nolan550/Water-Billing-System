@@ -4,7 +4,7 @@ from GUI.payment_window import PaymentWindow
 from GUI.view_bills_window import ViewBillsWindow
 
 class Dashboard:
-    def _init__(self, window, login_root, user):
+    def __init__(self, window, login_root, user):
         self.window = window
         self.login_root = login_root
         self.user = user
