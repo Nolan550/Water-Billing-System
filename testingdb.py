@@ -1,9 +1,3 @@
-from services.payment_service import process_payment
+from services.auth_service import register_user
 
-result = process_payment(2, 2150)
-
-if result:
-    print("New Amount Paid:", result["new_amount_paid"])
-    print("New Status:", result["status"])
-else:
-    print("Payment failed")
+register_user("admin", "admin123", "admin")

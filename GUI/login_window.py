@@ -19,7 +19,7 @@ class LoginWindow:
         self.password_entry = tk.Entry(root, show="*")
         self.password_entry.pack()
 
-        tk.Button(root, text="Login", command=self.Login).pack(pady=10)
+        tk.Button(root, text="Login", command=self.login).pack(pady=10)
 
     def login(self):
         username = self.username_entry.get()

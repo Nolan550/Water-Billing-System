@@ -1,7 +1,7 @@
 from database.connections import get_connection
 from decimal import Decimal
 
-def create_bill(customer_id, month, year, consumption, amount_due):
+def create_bill(customer_id, month, year):
     conn = get_connection()
     cur = conn.cursor()
 
@@ -69,6 +69,48 @@ def create_bill(customer_id, month, year, consumption, amount_due):
         return None
     finally:
 
+        cur.close()
+        conn.close()
+
+
+def get_customer_bills(customer_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    try:
+        cur.execute("""
+                    SELECT bill_id,
+                    billing_month,
+                    billing_year,
+                    consumption,
+                    amount_due,
+                    amount_paid,
+                    status
+                    FROM bills
+                    WHERE customer = %s
+                    ORDER BY billing-year DESC, billing_month DESC
+                    """, (customer_id,))
+        
+        rows = cur.fetchall()
+        bills= []
+
+        for row in rows:
+            bills.append({
+                "bill_id": row[0],
+                "month": row[1],
+                "year": row[2],
+                "consumption": row[3],
+                "amount_due": row[4],
+                "amount-paid": row[5],
+                "status": row[6]
+            })
+
+        return bills
+    except Exception as e:
+        print("Error fetching bills:", e)
+        return []
+    
+    finally:
         cur.close()
         conn.close()
 
