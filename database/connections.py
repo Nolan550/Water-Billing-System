@@ -3,8 +3,8 @@ import psycopg2
 def get_connection():
     return psycopg2.connect(
         host="localhost",
-        database="water_billing_db",
+        database="water_billing_db2",
         user="postgres",
-        password="database12",
-        port="5433"
+        password="nolan1234",
+        port="5432"
     )

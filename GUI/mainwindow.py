@@ -139,7 +139,7 @@ class main_window:
             customer_id,
             "March",
             2026,
-            consumption
+            consumption,
             amount_due
         )
 

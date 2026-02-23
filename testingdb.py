@@ -1,8 +1,9 @@
-from database.connections import get_connection
+from services.payment_service import process_payment
 
-try:
-    conn = get_connection()
-    print("Database connected successfully!")
-    conn.close()
-except Exception as e:
-    print("Connection failed:", e)
+result = process_payment(2, 2150)
+
+if result:
+    print("New Amount Paid:", result["new_amount_paid"])
+    print("New Status:", result["status"])
+else:
+    print("Payment failed")
