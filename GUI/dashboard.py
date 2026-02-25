@@ -27,12 +27,13 @@ class Dashboard(ctk.CTkFrame):
 
         
         if self.user["role"] in ["admin", "staff"]:
+
             self.billing_btn = ctk.CTkButton(
             self.sidebar,
             text="Billing",
             command=self.open_billing
-        )
-        self.billing_btn.pack(pady=10, fill="x", padx=20)
+            )
+            self.billing_btn.pack(pady=10, fill="x", padx=20)
 
 
         if self.user["role"] in ["admin", "staff"]:
@@ -40,8 +41,8 @@ class Dashboard(ctk.CTkFrame):
             self.sidebar,
             text="Payments",
             command=self.open_payments
-        )
-        self.payments_btn.pack(pady=10, fill="x", padx=20)
+            )
+            self.payments_btn.pack(pady=10, fill="x", padx=20)
 
 
         if self.user["role"] == "admin":
@@ -57,8 +58,8 @@ class Dashboard(ctk.CTkFrame):
             text="Logout",
             fg_color="red",
             command=self.logout
-        )
-        self.logout_btn.pack(side="bottom", pady=20, fill="x", padx=20)
+            )
+            self.logout_btn.pack(side="bottom", pady=20, fill="x", padx=20)
 
         
         self.content = ctk.CTkFrame(self)
@@ -74,7 +75,7 @@ class Dashboard(ctk.CTkFrame):
         self.clear_content()
         label = ctk.CTkLabel(
             self.content,
-            text=f"Welcome {self.user[1]}",
+            text=f"Welcome {self.user['username']}",
             font=("Arial", 24, "bold")
         )
         label.pack(pady=50)

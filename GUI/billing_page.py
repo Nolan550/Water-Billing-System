@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from tkinter import ttk, messagebox
-from .generate_bill_window.GenerateBillWindow import generate_bill
+from services.bill_service import create_bill
 
 
 class BillingPage(ctk.CTkFrame):
@@ -23,14 +23,21 @@ class BillingPage(ctk.CTkFrame):
         self.generate_btn.pack(pady=10)
 
     def generate(self):
-        try:
-            customer_id = int(self.customer_id_entry.get())
-            reading = float(self.meter_reading_entry.get())
-            month = self.month_entry.get()
+        def generate(self):
+            try:
+                customer_id = int(self.customer_id_entry.get())
+                month_year = self.month_entry.get()  # e.g 2026-02
 
-            generate_bill(customer_id, reading, month)
+                year, month = month_year.split("-")
+                year = int(year)
+                month = int(month)
 
-            messagebox.showinfo("Success", "Bill generated")
+                bill_id = create_bill(customer_id, month, year)
 
-        except Exception as e:
-            messagebox.showerror("Error", str(e))
+                if bill_id:
+                    messagebox.showinfo("Success", f"Bill ID: {bill_id}")
+                else:
+                    messagebox.showerror("Error", "Bill creation failed")
+
+            except Exception as e:
+                messagebox.showerror("Error", str(e))

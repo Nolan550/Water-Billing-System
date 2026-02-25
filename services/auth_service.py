@@ -45,6 +45,7 @@ def login_user(username, password):
         if bcrypt.checkpw(password.encode(), stored_hash):
             return {
                 "user_id": user[0],
+                "username": username,
                 "role": user[2]
             }
 

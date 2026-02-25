@@ -24,7 +24,7 @@ def get_customer_type_by_name(type_name):
     return None
 
 
-def add_customer(first, last, address, phone, type_id):
+def create_customer(first, last, address, phone, type_id):
     conn = get_connection()
     cur = conn.cursor()
 
@@ -34,7 +34,7 @@ def add_customer(first, last, address, phone, type_id):
         RETURNING customer_id
     """, (first, last, address, phone, type_id))
 
-    customer_id = cur.fetchone()[0]
+    
 
     conn.commit()
     cur.close()
