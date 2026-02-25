@@ -1,32 +1,39 @@
 from database.connections import get_connection
 from decimal import Decimal
 
-def create_bill(customer_id, month, year):
+def create_bill(customer_id, month, year, new_reading):
     conn = get_connection()
     cur = conn.cursor()
 
 
     try:
+        # Get last recorded meter reading
         cur.execute("""
-                    SELECT previous_reading, current_reading
-                    FROM meters
-                    WHERE customer_id = %s
-                    ORDER BY reading_date DESC
-                    LIMIT 1
-            """, (customer_id,))
-        
-        meter = cur.fetchone()
+            SELECT current_reading
+            FROM meters
+            WHERE customer_id = %s
+            ORDER BY reading_date DESC
+            LIMIT 1
+        """, (customer_id,))
 
-        if not meter:
-            raise Exception("No meter reading found for customer")
-        
+        last_reading = cur.fetchone()
 
-        previous_reading, current_reading = meter
-        consumption = current_reading - previous_reading
+        if last_reading:
+            previous_reading = last_reading[0]
+        else:
+            previous_reading = 0  # First time billing
 
+        previous_reading = Decimal(last_reading[0]) if last_reading else Decimal("0")
+        new_reading = Decimal(new_reading)
+        consumption = new_reading - previous_reading
 
         if consumption < 0:
-            raise Exception("Invalid meter readings")
+            raise Exception("Invalid meter reading")
+        
+        cur.execute("""
+            INSERT INTO meters (customer_id, previous_reading, current_reading, reading_date)
+            VALUES (%s, %s, %s, CURRENT_DATE)
+        """, (customer_id, previous_reading, new_reading))
         
         cur.execute("""
                 SELECT ct.rate_per_unit
@@ -40,9 +47,9 @@ def create_bill(customer_id, month, year):
         if not rate:
             raise Exception("Customer type not found")
         
-        rate_per_unit = (rate[0])
-        cosnumption = Decimal(consumption)
-        amount_due = consumption * rate_per_unit
+        rate_per_unit = Decimal(rate[0])
+        consumption = Decimal(consumption)
+        amount_due = Decimal(consumption) * rate_per_unit
         
         cur.execute("""
                 INSERT INTO bills(
@@ -87,8 +94,8 @@ def get_customer_bills(customer_id):
                     amount_paid,
                     status
                     FROM bills
-                    WHERE customer = %s
-                    ORDER BY billing-year DESC, billing_month DESC
+                    WHERE customer_id = %s
+                    ORDER BY billing_year DESC, billing_month DESC
                     """, (customer_id,))
         
         rows = cur.fetchall()
@@ -101,7 +108,7 @@ def get_customer_bills(customer_id):
                 "year": row[2],
                 "consumption": row[3],
                 "amount_due": row[4],
-                "amount-paid": row[5],
+                "amount_paid": row[5],
                 "status": row[6]
             })
 

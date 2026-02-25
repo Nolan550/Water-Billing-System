@@ -24,14 +24,14 @@ def get_last_meter_reading(customer_id):
     return 0
 
 
-def add_meter_reading(customer_id, previous_reading, current_reading):
+def add_meter_reading(customer_id, previous_reading, new_reading):
     conn = get_connection()
     cur = conn.cursor()
 
     cur.execute("""
         INSERT INTO meters (customer_id, previous_reading, current_reading, reading_date)
-        VALUES (%s, %s, %s, %s)
-    """, (customer_id, previous_reading, current_reading, date.today()))
+        VALUES (%s, %s, %s, CURRENT_DATE)
+    """, (customer_id, previous_reading, new_reading))
 
     conn.commit()
     cur.close()

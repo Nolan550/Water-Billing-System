@@ -50,9 +50,17 @@ class Dashboard(ctk.CTkFrame):
             self.sidebar,
             text="Reports",
             command=self.open_reports
+            
         )
             self.reports_btn.pack(pady=10, fill="x", padx=20)
-
+            
+            self.customers_btn = ctk.CTkButton(
+            self.sidebar,
+            text="Add Customer",
+            command=self.open_customers
+            )
+            self.customers_btn.pack(pady=10, fill="x", padx=20) 
+            
             self.logout_btn = ctk.CTkButton(
             self.sidebar,
             text="Logout",
@@ -94,7 +102,14 @@ class Dashboard(ctk.CTkFrame):
         from GUI.reports_page import ReportsPage
         self.clear_content()
         ReportsPage(self.content).pack(fill="both", expand=True)
+    
+    
+    def open_customers(self):
+        from GUI.customers_page import CustomersPage
+        self.clear_content()
+        CustomersPage(self.content).pack(fill="both", expand=True)
 
     def logout(self):
         self.destroy()              # Destroy dashboard completely
         self.master.show_login()    # Then show login
+

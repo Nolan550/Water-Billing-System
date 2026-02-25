@@ -23,16 +23,16 @@ class BillingPage(ctk.CTkFrame):
         self.generate_btn.pack(pady=10)
 
     def generate(self):
-        def generate(self):
             try:
                 customer_id = int(self.customer_id_entry.get())
                 month_year = self.month_entry.get()  # e.g 2026-02
+                consumption = float(self.meter_reading_entry.get())
 
                 year, month = month_year.split("-")
                 year = int(year)
                 month = int(month)
 
-                bill_id = create_bill(customer_id, month, year)
+                bill_id = create_bill(customer_id, month, year, consumption)
 
                 if bill_id:
                     messagebox.showinfo("Success", f"Bill ID: {bill_id}")
