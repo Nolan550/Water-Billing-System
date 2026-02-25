@@ -6,16 +6,23 @@ def register_user(username, password, role):
     conn = get_connection()
     cur = conn.cursor()
 
-    hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+    try:
+        hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
 
-    cur.execute("""
-        INSERT INTO users (username, password_hash, role)
-        VALUES (%s, %s, %s)
-    """, (username, hashed.decode(), role))
+        cur.execute("""
+            INSERT INTO users (username, password_hash, role)
+            VALUES (%s, %s, %s)
+        """, (username, hashed.decode(), role))
 
-    conn.commit()
-    cur.close()
-    conn.close()
+        conn.commit()
+        return True
+    except Exception as e:
+        conn.rollback()
+        print("Registration Error:", e)
+        return False
+    finally:
+        cur.close()
+        conn.close()
 
 
 def login_user(username, password):
