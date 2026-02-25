@@ -31,11 +31,11 @@ class CustomersPage(ctk.CTkFrame):
     def add_customer(self):
         try:
             create_customer(
-                self.firstname_entry.get(),
-                self.lastname_entry.get(),
-                self.address_entry.get(),
-                self.phone_entry.get(),
-                int(self.type_entry.get())
+                first = self.firstname_entry.get(),
+                last = self.lastname_entry.get(),
+                address = self.address_entry.get(),
+                phone = self.phone_entry.get(),
+                type_id = int(self.type_entry.get())
             )
 
             messagebox.showinfo("Success", "Customer added successfully")

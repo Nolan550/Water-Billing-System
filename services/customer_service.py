@@ -24,22 +24,26 @@ def get_customer_type_by_name(type_name):
     return None
 
 
-def create_customer(first, last, address, phone, type_id):
+def create_customer(first, last, address, phone, type_id, customer_id=None):
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute("""
-        INSERT INTO customers (first_name, last_name, address, phone, type_id)
-        VALUES (%s, %s, %s, %s, %s)
-        RETURNING customer_id
-    """, (first, last, address, phone, type_id))
-
-    
+    if customer_id is None:
+        cur.execute("""
+            INSERT INTO customers(first_name, last_name, address, phone, type_id)
+            VALUES (%s, %s, %s, %s, %s)
+            RETURNING customer_id
+        """, (first, last, address, phone, type_id))
+        customer_id = cur.fetchone()[0]
+    else:
+        cur.execute("""
+            INSERT INTO customers(customer_id, first_name, last_name, address, phone, type_id)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (customer_id, first, last, address, phone, type_id))
 
     conn.commit()
     cur.close()
     conn.close()
-
     return customer_id
 
 
