@@ -1,5 +1,7 @@
 import customtkinter as ctk
 
+from GUI.customer_managment_page import CustomerManagementPage
+
 
 class Dashboard(ctk.CTkFrame):
     def __init__(self, master, user):
@@ -43,6 +45,7 @@ class Dashboard(ctk.CTkFrame):
             command=self.open_payments
             )
             self.payments_btn.pack(pady=10, fill="x", padx=20)
+            
 
 
         if self.user["role"] == "admin":
@@ -68,6 +71,13 @@ class Dashboard(ctk.CTkFrame):
             command=self.logout
             )
             self.logout_btn.pack(side="bottom", pady=20, fill="x", padx=20)
+
+            self.manage_customer_btn = ctk.CTkButton(
+            self.sidebar,
+            text="Manage Customer",
+            command=self.open_customer_management
+            )
+            self.manage_customer_btn.pack(pady=10)
 
         
         self.content = ctk.CTkFrame(self)
@@ -102,6 +112,23 @@ class Dashboard(ctk.CTkFrame):
         from GUI.reports_page import ReportsPage
         self.clear_content()
         ReportsPage(self.content).pack(fill="both", expand=True)
+    def show_bills(self):
+        from services.bill_service import get_customer_bills
+
+        customer_id = int(self.customer_id_entry.get())
+        bills = get_customer_bills(customer_id)
+
+        self.clear_content()
+
+        for bill in bills:
+            label = ctk.CTkLabel(
+            self,
+            text=f"Bill {bill['bill_id']} | {bill['month']}/{bill['year']} | "
+                 f"Consumption: {bill['consumption']} | "
+                 f"Amount Due: {bill['amount_due']} | "
+                 f"Status: {bill['status']}"
+            )
+            label.pack(pady=5)
     
     
     def open_customers(self):
@@ -111,5 +138,15 @@ class Dashboard(ctk.CTkFrame):
 
     def logout(self):
         self.destroy()              # Destroy dashboard completely
-        self.master.show_login()    # Then show login
+        self.master.show_login()
+        
+    def open_customer_management(self):
+        from GUI.customer_managment_page import CustomerManagementPage
+        self.clear_content()
+        CustomerManagementPage(self.content)
+    
+
+    def clear_content(self):
+        for widget in self.content.winfo_children():
+            widget.destroy()
 

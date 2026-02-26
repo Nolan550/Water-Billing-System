@@ -14,7 +14,7 @@ class LoginWindow(ctk.CTkFrame):
         # Title
         self.title_label = ctk.CTkLabel(
             self,
-            text="Water Billing System",
+            text="Water Billing Management System",
             font=("Arial", 28, "bold")
         )
         self.title_label.pack(pady=40)

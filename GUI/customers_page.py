@@ -24,7 +24,8 @@ class CustomersPage(ctk.CTkFrame):
 
         self.type_entry = ctk.CTkEntry(self, placeholder_text="Type ID (1,2,3)")
         self.type_entry.pack(pady=5)
-
+    
+        
         self.add_btn = ctk.CTkButton(self, text="Add Customer", command=self.add_customer)
         self.add_btn.pack(pady=10)
 
@@ -42,3 +43,6 @@ class CustomersPage(ctk.CTkFrame):
 
         except Exception as e:
             messagebox.showerror("Error", str(e))
+
+    
+    

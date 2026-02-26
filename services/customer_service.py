@@ -64,3 +64,32 @@ def get_customer_bills(customer_id):
     conn.close()
 
     return bills
+
+
+def get_customer_details(customer_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    try:
+        cur.execute("""
+            SELECT first_name, last_name, address, phone, type_id
+            FROM customers
+            WHERE customer_id = %s
+        """, (customer_id,))
+
+        row = cur.fetchone()
+
+        if not row:
+            return None
+
+        return {
+            "firstname": row[0],
+            "lastname": row[1],
+            "address": row[2],
+            "phone": row[3],
+            "type_id": row[4]
+        }
+
+    finally:
+        cur.close()
+        conn.close()
