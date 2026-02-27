@@ -53,3 +53,28 @@ def process_payment(bill_id, payment_amount):
         cur.close()
         conn.close()
         
+
+
+
+
+def get_payment_history(customer_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT p.payment_id,
+               p.amount_paid,
+               p.payment_date,
+               p.bill_id
+        FROM payments p
+        JOIN bills b ON p.bill_id = b.bill_id
+        WHERE b.customer_id = %s
+        ORDER BY p.payment_date DESC
+    """, (customer_id,))
+
+    payments = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return payments

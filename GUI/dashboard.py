@@ -64,13 +64,8 @@ class Dashboard(ctk.CTkFrame):
             )
             self.customers_btn.pack(pady=10, fill="x", padx=20) 
             
-            self.logout_btn = ctk.CTkButton(
-            self.sidebar,
-            text="Logout",
-            fg_color="red",
-            command=self.logout
-            )
-            self.logout_btn.pack(side="bottom", pady=20, fill="x", padx=20)
+           
+            
 
             self.manage_customer_btn = ctk.CTkButton(
             self.sidebar,
@@ -79,6 +74,14 @@ class Dashboard(ctk.CTkFrame):
             )
             self.manage_customer_btn.pack(pady=10)
 
+        
+        self.logout_btn = ctk.CTkButton(
+            self.sidebar,
+            text="Logout",
+            fg_color="red",
+            command=self.logout
+            )
+        self.logout_btn.pack(side="bottom", pady=20, fill="x", padx=20)
         
         self.content = ctk.CTkFrame(self)
         self.content.grid(row=0, column=1, sticky="nsew")
