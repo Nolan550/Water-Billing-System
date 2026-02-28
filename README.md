@@ -16,10 +16,3 @@ See the [class diagram](UML/Class-Diagram.png) structure.
 1. Clone the repository
 2. Open the `src` folder in your IDE
 3. Compile and run the main program
-
-## Group Members
-- Nolan Davis 
-- Benedict Martin
-- Erick Thomas
-- Abdulhafidh Seif
-- Rifat Othman
