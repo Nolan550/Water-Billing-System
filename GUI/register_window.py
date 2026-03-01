@@ -35,7 +35,7 @@ class RegisterWindow(ctk.CTkFrame):
         )
         self.password_entry.pack(pady=15)
 
-        # Role Dropdown
+        
         self.role_option = ctk.CTkOptionMenu(
             self.card,
             values=["admin", "staff"],
