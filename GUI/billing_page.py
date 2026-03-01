@@ -25,7 +25,7 @@ class BillingPage(ctk.CTkFrame):
     def generate(self):
             try:
                 customer_id = int(self.customer_id_entry.get())
-                month_year = self.month_entry.get()  # e.g 2026-02
+                month_year = self.month_entry.get()
                 consumption = float(self.meter_reading_entry.get())
 
                 year, month = month_year.split("-")
