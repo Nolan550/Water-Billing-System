@@ -11,7 +11,7 @@ class LoginWindow(ctk.CTkFrame):
 
         self.configure(fg_color="white")
 
-        # Title
+        
         self.title_label = ctk.CTkLabel(
             self,
             text="Water Billing Management System",
@@ -19,7 +19,7 @@ class LoginWindow(ctk.CTkFrame):
         )
         self.title_label.pack(pady=40)
 
-        # Card Frame
+        
         self.card = ctk.CTkFrame(self, width=400, height=350, corner_radius=15)
         self.card.pack()
         self.card.pack_propagate(False)
