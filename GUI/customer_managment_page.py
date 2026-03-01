@@ -7,7 +7,7 @@ class CustomerManagementPage(ctk.CTkFrame):
         super().__init__(master)
         self.pack(fill="both", expand=True)
 
-        # ===== Top Section =====
+        
         self.top_frame = ctk.CTkFrame(self)
         self.top_frame.pack(fill="x", pady=10)
 
@@ -38,7 +38,7 @@ class CustomerManagementPage(ctk.CTkFrame):
         )
         self.view_payments_btn.pack(pady=5)
 
-        # ===== Results Section =====
+        
         self.result_frame = ctk.CTkFrame(self)
         self.result_frame.pack(fill="both", expand=True, pady=10)
 
